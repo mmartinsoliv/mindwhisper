@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_SETTINGS, mergeSettings, migrateSettings } from './settings';
+import { DEFAULT_SETTINGS, mergeSettings, migrateSettings, resolveDefaultBackendUrl } from './settings';
 
 describe('settings', () => {
   it('has the documented defaults', () => {
@@ -34,5 +34,11 @@ describe('settings', () => {
     expect(days(-3)).toBe(30);
     expect(days(1.5)).toBe(1);
     expect(days(90)).toBe(90);
+  });
+  it('resolveDefaultBackendUrl uses the build variable and falls back to the local server', () => {
+    expect(resolveDefaultBackendUrl(undefined)).toBe('http://127.0.0.1:8787');
+    expect(resolveDefaultBackendUrl('')).toBe('http://127.0.0.1:8787');
+    expect(resolveDefaultBackendUrl('   ')).toBe('http://127.0.0.1:8787');
+    expect(resolveDefaultBackendUrl(' https://mindwhisper-api.example.workers.dev ')).toBe('https://mindwhisper-api.example.workers.dev');
   });
 });
