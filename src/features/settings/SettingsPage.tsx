@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { Button, Card, Select, TextField, Toggle } from '@/components';
+import { Button, Card, CommitTextField, Select, Toggle } from '@/components';
 import { disable, enable } from '@tauri-apps/plugin-autostart';
 import { commands } from '@/services/tauri/commands';
 import { deleteAllUserData, emitChange, repositories } from '@/services/storage';
@@ -140,9 +140,9 @@ export function SettingsPage() {
       </Section>
 
       <Section title="Backend">
-        <TextField label="Server URL" value={settings.backend.url} onChange={(url) => void update({ backend: { url } })} />
+        <CommitTextField label="Server URL" value={settings.backend.url} onCommit={(url) => void update({ backend: { url } })} />
         <div>
-          <TextField label="Access token" type="password" value={settings.backend.token} onChange={(token) => void update({ backend: { token } })} />
+          <CommitTextField label="Access token" type="password" value={settings.backend.token} onCommit={(token) => void update({ backend: { token } })} />
           <p className="mt-1 text-xs text-muted">Provided by whoever runs your Mindwhisper server. Provider API keys never live in this app.</p>
         </div>
       </Section>
