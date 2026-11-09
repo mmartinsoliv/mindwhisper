@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitest/config';
-import { ACCESS_REQUEST_URL, RELEASES_URL } from './src/config.ts';
+import { ACCESS_REQUEST_URL, RELEASES_URL } from './src/config';
 
 // Static fallbacks in index.html come from config.ts too, so the repository is named in one place only.
 const staticLinks = {
