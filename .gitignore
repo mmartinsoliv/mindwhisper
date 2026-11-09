@@ -1,0 +1,14 @@
+node_modules
+dist
+src-tauri/target
+src-tauri/gen
+.env
+server/.env
+test-results
+playwright-report
+
+.DS_Store
+site/node_modules
+site/dist
+.wrangler
+server/.dev.vars
