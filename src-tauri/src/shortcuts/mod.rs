@@ -137,6 +137,7 @@ pub fn shortcut_status(reg: State<ShortcutRegistry>) -> Option<AppError> {
 #[tauri::command]
 pub fn shortcut_unregister(app: AppHandle, reg: State<ShortcutRegistry>) -> CmdResult<()> {
     *lock(&reg.last_error) = None;
+    let _ = app.emit(STATUS_EVENT, None::<&AppError>);
     if let Some(old) = lock(&reg.current).take() { let _ = app.global_shortcut().unregister(old.shortcut); }
     Ok(())
 }

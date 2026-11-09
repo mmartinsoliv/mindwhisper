@@ -11,7 +11,7 @@ This is for the owner. Every step below needs one of your accounts (GitHub, Clou
 ## 2. One-time setup
 
 1. Create the GitHub repository `mmartinsoliv/mindwhisper` and decide its visibility. The site finds the installers through the public GitHub API, so the download buttons only work for other people if the repository (or at least its releases) is public. For a private repository the page falls back to a link to the releases page, which visitors cannot open.
-2. Connect this checkout and push (nothing has been pushed so far, and no remote is configured):
+2. Connect this checkout and push (check what is already configured with `git remote -v`):
 
    ```bash
    git remote add origin git@github.com:mmartinsoliv/mindwhisper.git
@@ -102,7 +102,7 @@ The `release` workflow passes it to the build as `VITE_DEFAULT_BACKEND_URL`, so 
 5. Install each on a real machine and run the matching rows of `docs/MANUAL-TEST.md` (the unsigned install rows, the shortcut banner, the console check). Nothing in the project has been installed from a release yet.
 6. Publish the draft. Until then the site has nothing to link to.
 
-The release body tells people the build is unsigned. A macOS build is ad-hoc signed only (`signingIdentity` is `-`), which lets it run on Apple Silicon but is not a Developer ID signature.
+The release body tells people the build is unsigned. A macOS build is ad-hoc signed only (`signingIdentity` is `-`), which is meant to let it run on Apple Silicon (not tried on hardware) but is not a Developer ID signature.
 
 ## 7. Deploy the site
 
