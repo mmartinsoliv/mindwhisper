@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, TextField } from '@/components';
+import { Button, CommitTextField } from '@/components';
 import { commands } from '@/services/tauri/commands';
 import { useDictationStore } from '@/stores/dictationStore';
 import { useSettingsStore } from '@/stores/settingsStore';
@@ -44,8 +44,8 @@ export function TestStep({ onSkippable }: { onSkippable(v: boolean): void }) {
       {showConnect && (
         <div className="mt-5 space-y-3 rounded-control border border-border bg-surface-2 p-4">
           <h2 className="text-sm font-semibold">Connect to your server</h2>
-          <TextField label="Server URL" value={backend.url} onChange={(url) => void update({ backend: { url } })} />
-          <TextField label="Access token" type="password" value={backend.token} onChange={(token) => void update({ backend: { token } })}
+          <CommitTextField label="Server URL" value={backend.url} onCommit={(url) => void update({ backend: { url } })} />
+          <CommitTextField label="Access token" type="password" value={backend.token} onCommit={(token) => void update({ backend: { token } })}
             hint="Ask whoever runs your Mindwhisper server. Not needed for the Skip path." />
         </div>
       )}

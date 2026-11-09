@@ -10,6 +10,7 @@ export const EVENTS = {
   command: 'dictation://command',
   settingsChanged: 'settings://changed',
   historyChanged: 'history://changed',
+  shortcutStatus: 'shortcut://status',
   dictionaryChanged: 'dictionary://changed',
 } as const;
 

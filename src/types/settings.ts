@@ -21,6 +21,13 @@ export type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartia
 export const LANGUAGES: Language[] = ['auto', 'en', 'pt-BR'];
 export const STYLES: CleanupStyle[] = ['verbatim', 'minimal', 'professional', 'casual', 'concise'];
 
+const LOCAL_BACKEND_URL = 'http://127.0.0.1:8787';
+
+export function resolveDefaultBackendUrl(raw: string | undefined): string {
+  const v = raw?.trim();
+  return v ? v : LOCAL_BACKEND_URL;
+}
+
 export const DEFAULT_SETTINGS: Settings = {
   version: 1, onboardingDone: false,
   shortcut: { accelerator: 'CommandOrControl+Shift+Space', mode: 'toggle' },
@@ -28,7 +35,7 @@ export const DEFAULT_SETTINGS: Settings = {
   cleanup: { enabled: true, style: 'minimal', removeFillers: true, autoPunctuation: true },
   history: { enabled: true, retentionDays: 30 }, startup: { launchAtLogin: false },
   theme: 'system', restoreClipboard: true, showPreview: true,
-  backend: { url: 'http://127.0.0.1:8787', token: '' },
+  backend: { url: resolveDefaultBackendUrl(import.meta.env.VITE_DEFAULT_BACKEND_URL), token: '' },
 };
 
 const isObj = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);

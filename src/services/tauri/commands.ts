@@ -23,6 +23,7 @@ export const commands = {
   openSystemSettings: (pane: 'accessibility' | 'microphone') => call<void>('open_system_settings', { pane }),
   shortcutRegister: (accelerator: string, mode: 'toggle' | 'hold') => call<void>('shortcut_register', { accelerator, mode }),
   shortcutUnregister: () => call<void>('shortcut_unregister'),
+  shortcutStatus: () => call<AppError | null>('shortcut_status'),
   shortcutSetCancelEnabled: (enabled: boolean) => call<void>('shortcut_set_cancel_enabled', { enabled }),
   overlayShow: () => call<void>('overlay_show'),
   overlayHide: () => call<void>('overlay_hide'),

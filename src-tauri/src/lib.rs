@@ -36,7 +36,7 @@ pub fn run() {
             audio::audio_list_devices, audio::audio_probe, audio::audio_start, audio::audio_stop, audio::audio_cancel,
             insertion::insert_text,
             permissions::check_permissions, permissions::open_system_settings,
-            shortcuts::shortcut_register, shortcuts::shortcut_unregister, shortcuts::shortcut_set_cancel_enabled,
+            shortcuts::shortcut_register, shortcuts::shortcut_unregister, shortcuts::shortcut_status, shortcuts::shortcut_set_cancel_enabled,
             windows::overlay_show, windows::overlay_hide, windows::overlay_resize, windows::main_show,
         ])
         .build(tauri::generate_context!())

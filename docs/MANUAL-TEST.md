@@ -104,6 +104,11 @@ Tester: ______  Date: ______  OS version: ______  Mic: ______  Provider run: moc
 | - [ ] History control: turn 'Save dictation history' off, dictate, and confirm nothing was saved; turn it on, dictate, and confirm the entry appears (criterion 11) | | | |
 | - [ ] Complete a full dictation (record, stop, text inserted) without opening the main window at any point (criterion 12) | | | |
 | - [ ] Windows: microphone privacy toggle (Settings → Privacy → Microphone) off gives the error with a next step | | | |
+| - [ ] macOS: install the unsigned `.dmg` from a release, drag the app to Applications, and pass Gatekeeper (right-click, Open, Open) so the app starts | | | |
+| - [ ] Windows: run the `-setup.exe` (and separately the `.msi`) from a release and pass SmartScreen (More info, Run anyway) so the app installs and starts | | | |
+| - [ ] The shortcut banner appears when the shortcut is taken at startup (hold it in another app first) and disappears after choosing another one in Settings | | | |
+| - [ ] No CSP errors in the webview console of the main window and of the overlay window while using every page and a full dictation, on a built release (not `tauri dev`, which runs without a policy; open devtools on a debug build or inspect the window). Blocked inline styles from Tailwind or React style attributes would show up as "Content Security Policy" console messages | | | |
+| - [ ] The download page buttons point at the published release assets (macOS Apple Silicon, macOS Intel, Windows installer) and open the right file | | | |
 
 ### Windows latency notes
 

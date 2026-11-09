@@ -1,0 +1,6 @@
+# Copy to .dev.vars for `pnpm worker:dev`. Never commit .dev.vars.
+APP_TOKENS=dev-token
+STT_PROVIDER=openai
+OPENAI_API_KEY=
+LLM_PROVIDER=anthropic
+ANTHROPIC_API_KEY=

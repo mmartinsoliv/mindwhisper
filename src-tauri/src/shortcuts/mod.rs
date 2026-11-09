@@ -64,11 +64,18 @@ pub fn plan_register(current: Option<Shortcut>, requested: Shortcut) -> Register
 struct ActiveShortcut { shortcut: Shortcut, gate: Arc<Mutex<ShortcutGate>> }
 
 #[derive(Default)]
-pub struct ShortcutRegistry { current: Mutex<Option<ActiveShortcut>>, cancel: Mutex<Option<Shortcut>> }
+pub struct ShortcutRegistry { current: Mutex<Option<ActiveShortcut>>, cancel: Mutex<Option<Shortcut>>, last_error: Mutex<Option<AppError>> }
 
 fn lock<T>(m: &Mutex<T>) -> MutexGuard<'_, T> { m.lock().unwrap_or_else(|e| e.into_inner()) }
 
 fn emit_action(app: &AppHandle, action: &str) { let _ = app.emit("dictation://hotkey", json!({ "action": action })); }
+
+const STATUS_EVENT: &str = "shortcut://status";
+
+/// Remembers the outcome of the latest registration so a window that was not listening at the time can ask for it.
+pub fn record_result(slot: &Mutex<Option<AppError>>, result: &CmdResult<()>) {
+    *lock(slot) = result.as_ref().err().cloned();
+}
 
 /// The plugin flattens every `global_hotkey` error into `Error::GlobalHotkey(String)`, so there is no
 /// variant to match on; the messages below come from global-hotkey 0.8.0 (`error.rs`, macOS backend):
@@ -91,10 +98,9 @@ fn map_register_err(e: tauri_plugin_global_shortcut::Error) -> AppError {
     }
 }
 
-#[tauri::command]
-pub fn shortcut_register(app: AppHandle, reg: State<ShortcutRegistry>, accelerator: String, mode: String) -> CmdResult<()> {
-    let mode = ShortcutMode::parse(&mode)?;
-    let shortcut = parse_accelerator(&accelerator)?;
+fn register_inner(app: &AppHandle, reg: &ShortcutRegistry, accelerator: &str, mode: &str) -> CmdResult<()> {
+    let mode = ShortcutMode::parse(mode)?;
+    let shortcut = parse_accelerator(accelerator)?;
     let gs = app.global_shortcut();
     let mut cur = lock(&reg.current);
     match plan_register(cur.as_ref().map(|c| c.shortcut), shortcut) {
@@ -116,7 +122,22 @@ pub fn shortcut_register(app: AppHandle, reg: State<ShortcutRegistry>, accelerat
 }
 
 #[tauri::command]
+pub fn shortcut_register(app: AppHandle, reg: State<ShortcutRegistry>, accelerator: String, mode: String) -> CmdResult<()> {
+    let result = register_inner(&app, &reg, &accelerator, &mode);
+    record_result(&reg.last_error, &result);
+    let _ = app.emit(STATUS_EVENT, result.as_ref().err());
+    result
+}
+
+#[tauri::command]
+pub fn shortcut_status(reg: State<ShortcutRegistry>) -> Option<AppError> {
+    lock(&reg.last_error).clone()
+}
+
+#[tauri::command]
 pub fn shortcut_unregister(app: AppHandle, reg: State<ShortcutRegistry>) -> CmdResult<()> {
+    *lock(&reg.last_error) = None;
+    let _ = app.emit(STATUS_EVENT, None::<&AppError>);
     if let Some(old) = lock(&reg.current).take() { let _ = app.global_shortcut().unregister(old.shortcut); }
     Ok(())
 }
@@ -223,5 +244,14 @@ mod tests {
         assert_eq!(classify_register_error("Unable to register hotkey: Unknown scancode for Foo").code, "shortcut_invalid");
         assert_eq!(classify_register_error("Couldn't recognize \"Banana\" as a valid HotKey Code").code, "shortcut_invalid");
         assert_eq!(classify_register_error("Unexpected empty token while parsing hotkey: \"+\"").code, "shortcut_invalid");
+    }
+
+    #[test]
+    fn record_result_keeps_the_last_error_and_clears_it_on_success() {
+        let slot: Mutex<Option<AppError>> = Mutex::new(None);
+        record_result(&slot, &Err(AppError::new("shortcut_taken", "Another app is already using this shortcut. Pick a different one.")));
+        assert_eq!(lock(&slot).as_ref().map(|e| e.code.as_str()), Some("shortcut_taken"));
+        record_result(&slot, &Ok(()));
+        assert!(lock(&slot).is_none());
     }
 }

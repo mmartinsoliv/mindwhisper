@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 const cmd = vi.hoisted(() => ({
@@ -124,7 +124,9 @@ describe('SettingsPage', () => {
   it('saves backend URL and token', async () => {
     render(<SettingsPage />);
     const url = screen.getByLabelText('Server URL'); await userEvent.clear(url); await userEvent.type(url, 'https://api.example.com');
-    expect(s().backend.url).toBe('https://api.example.com');
+    expect(s().backend.url).not.toBe('https://api.example.com'); // not saved mid-typing
+    fireEvent.blur(url);
+    await waitFor(() => expect(s().backend.url).toBe('https://api.example.com'));
     expect(screen.getByLabelText('Access token')).toHaveAttribute('type', 'password');
   });
   it('deletes all user data only after a second confirming click', async () => {
