@@ -147,7 +147,7 @@ function tauriMockScript(opts: MockOptions): void {
   const nullableStr = (v: unknown) => v === null || typeof v === 'string';
   const oneOf = (...values: string[]) => (v: unknown) => typeof v === 'string' && values.includes(v);
   const shapes: Record<string, Record<string, (v: unknown) => boolean>> = {
-    audio_list_devices: {}, audio_stop: {}, audio_cancel: {}, check_permissions: {}, shortcut_unregister: {},
+    audio_list_devices: {}, audio_stop: {}, audio_cancel: {}, check_permissions: {}, shortcut_unregister: {}, shortcut_status: {},
     overlay_show: {}, overlay_hide: {}, main_show: {},
     audio_probe: { deviceId: nullableStr }, audio_start: { deviceId: nullableStr },
     insert_text: { text: str, restoreClipboard: bool },
@@ -181,6 +181,7 @@ function tauriMockScript(opts: MockOptions): void {
       case 'audio_stop': return wav(); // the Rust command returns tauri::ipc::Response, which arrives in JS as an ArrayBuffer
       case 'check_permissions': return permissions;
       case 'insert_text': return { clipboardRestored: true };
+      case 'shortcut_status': return null;
       case 'plugin:autostart|is_enabled': return false;
       default: return undefined; // every other allowlisted command returns nothing
     }

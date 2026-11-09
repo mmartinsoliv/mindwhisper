@@ -7,6 +7,7 @@ import { DictionaryPage } from '@/features/dictionary/DictionaryPage';
 import { SettingsPage } from '@/features/settings';
 import { Onboarding } from '@/features/onboarding';
 import { Sidebar } from './Sidebar';
+import { ShortcutBanner } from './ShortcutBanner';
 import type { Route } from './routes';
 
 export function App() {
@@ -20,6 +21,7 @@ export function App() {
       <Sidebar route={route} onSelect={setRoute} />
       <main className="min-w-0 flex-1 overflow-y-auto px-6 py-8 sm:px-10">
         <div className="mx-auto max-w-3xl">
+          {route !== 'settings' && <ShortcutBanner onOpenSettings={() => setRoute('settings')} />}
           {route === 'dictation' && <DictationPage />}
           {route === 'history' && <HistoryPage />}
           {route === 'dictionary' && <DictionaryPage />}
