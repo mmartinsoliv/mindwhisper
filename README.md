@@ -6,6 +6,10 @@ Mindwhisper is a desktop dictation app for macOS and Windows. Press a global sho
 
 The flow: **shortcut → speak → shortcut again → the audio is transcribed and tidied up → the text is pasted into the focused app.** A small floating overlay shows the state (recording, working, inserted, error). The main window is only for onboarding, settings, history and the personal dictionary; dictation never needs it.
 
+## Download and install
+
+A product page in `site/` links to the macOS (Apple Silicon and Intel) and Windows 10/11 installers on GitHub Releases. The hosted backend is invite-only: you need an access token from the owner, which you paste in Settings, Backend. The builds are not code signed, so the first launch shows a warning: on macOS, right-click the app, choose Open, then Open again; on Windows, choose More info, then Run anyway in the SmartScreen dialog. The owner's steps to host the backend and the page and to publish a release are in [docs/DEPLOY.md](docs/DEPLOY.md).
+
 ## How it works
 
 ```
@@ -60,6 +64,8 @@ Terminal 2, the app:
 pnpm tauri dev
 ```
 
+`VITE_DEFAULT_BACKEND_URL` is optional. It is read only when the frontend is built and sets the Server URL a fresh install starts with; unset or blank keeps `http://127.0.0.1:8787`, so you do not need it in development.
+
 The first run walks through onboarding. On the "Try it" step enter the server URL (`http://127.0.0.1:8787`) and one of the tokens from `APP_TOKENS`; you can also change both later in Settings → Backend. Mock mode still needs a token, because the server checks it on every request. Check the server with `curl -s localhost:8787/health`, which returns `{"ok":true}` without a token.
 
 ## Using real providers
@@ -83,7 +89,11 @@ Native audio capture, real pasting into other apps, global shortcuts, the tray a
 pnpm tauri build
 ```
 
-The result is unsigned. Code signing, notarization and auto-update are out of scope for the MVP (see Known limitations).
+The result is not code signed (macOS bundles are only ad-hoc signed). Code signing, notarization and auto-update are out of scope for now (see Known limitations).
+
+## Releasing
+
+Pushing a tag that starts with `v` runs the `release` workflow, which builds macOS and Windows installers into a draft GitHub Release; the owner publishes it. Hosting the Worker, deploying the page and issuing tokens are described step by step in [docs/DEPLOY.md](docs/DEPLOY.md). Nothing has been published or deployed from this repository yet.
 
 ## Permissions
 
@@ -121,14 +131,16 @@ src-tauri/                          Tauri 2 shell (Rust)
   src/audio, insertion, shortcuts, windows, permissions.rs, tray.rs, error.rs
   capabilities/, tauri.conf.json, Info.plist
 server/                             Hono backend
-  src/routes, middleware, providers, config.ts, app.ts, index.ts
+  src/routes, middleware, providers, config.ts, app.ts, index.ts (Node entry), worker.ts (Cloudflare Worker entry)
+site/                               landing page with OS-aware download links (static Vite, Cloudflare Pages)
+.github/workflows/                  ci.yml (checks) and release.yml (draft releases on v* tags)
 e2e/                                Playwright specs and the mocked Tauri runtime (fixtures.ts)
-docs/                               PROVIDERS.md, PLATFORM-LIMITATIONS.md, MANUAL-TEST.md, design spec and plan under team8/
+docs/                               PROVIDERS.md, PLATFORM-LIMITATIONS.md, MANUAL-TEST.md, DEPLOY.md, design spec and plan under team8/
 ```
 
 ## Known limitations
 
-The main ones: macOS needs Accessibility to paste, paste is blocked by some apps, the overlay's no-focus behaviour is unverified on real systems, transcription is batch only, the backend token is stored in the settings file and not the keychain, the real provider adapters are untested against live APIs, and Linux, signing and auto-update are not covered. A global shortcut conflict at startup is only logged, not shown in the interface. The full list with reasons is in [docs/PLATFORM-LIMITATIONS.md](docs/PLATFORM-LIMITATIONS.md).
+The main ones: macOS needs Accessibility to paste, paste is blocked by some apps, the overlay's no-focus behaviour is unverified on real systems, transcription is batch only, the backend token is stored in the settings file and not the keychain, the real provider adapters are untested against live APIs, releases are unsigned, the hosted backend is invite-only, and Linux and auto-update are not covered. The full list with reasons is in [docs/PLATFORM-LIMITATIONS.md](docs/PLATFORM-LIMITATIONS.md).
 
 ## Verification status
 
@@ -143,6 +155,8 @@ Run on 2026-10-20 on one macOS machine, against the final code:
 | `cd server && pnpm install --frozen-lockfile && pnpm test && pnpm typecheck` | OK, 5 test files, 38 tests passed, typecheck clean (re-run after the server .env fix) |
 | `cd src-tauri && cargo test && cargo check` | OK, 37 passed, 1 ignored (the hardware capture test), 0 failed |
 | `pnpm tauri build --debug --no-bundle` | OK, the full app compiled (`src-tauri/target/debug/mindwhisper`); it was not launched |
+
+Release configuration, the Worker and the site were added on 2026-11-09 and have not been run on real machines; see docs/DEPLOY.md and docs/MANUAL-TEST.md.
 
 The MVP is complete when a user can do the twelve things below. "Mocks" means the flow was exercised in the real app UI and controller with the Tauri runtime and the backend mocked, so it proves the wiring and the logic, not the native layer or a provider. The Playwright specs are in `e2e/`, the Vitest tests sit next to the code in `src/` and `server/src/`. Manual items refer to checklist rows in [docs/MANUAL-TEST.md](docs/MANUAL-TEST.md); no manual run has been recorded yet, so none of them counts as verified.
 
