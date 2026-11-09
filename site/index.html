@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mindwhisper dictation</title>
+  <meta name="description" content="Dictation for macOS and Windows. Press a shortcut in any app, speak Portuguese (Brazil) or English, and tidy text lands where you were typing.">
+  <link rel="icon" href="/icon.png">
+  <meta name="theme-color" content="#131211">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap bar">
+      <a class="brand" href="#top"><img src="/icon.png" width="28" height="28" alt=""><span>Mindwhisper</span></a>
+      <nav class="nav" aria-label="Primary">
+        <a class="nav-link" href="#how">How it works</a>
+        <a class="nav-link" href="#privacy">Privacy</a>
+        <a class="nav-link" href="#install">Install</a>
+        <a class="nav-cta" href="#download">Download</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <h1>Speak anywhere. It types for you.</h1>
+          <p class="lede">Mindwhisper is a dictation app for macOS and Windows. Press a shortcut in any app, speak Portuguese (Brazil) or English, and tidy text lands in the field you were typing in.</p>
+          <div class="actions">
+            <a class="btn btn-primary" id="download-primary" href="%RELEASES_URL%">Download</a>
+            <a class="btn btn-ghost" data-access-link href="%ACCESS_REQUEST_URL%">Request access</a>
+          </div>
+          <p class="note" id="download-note">Access is by invitation while Mindwhisper is in early release.</p>
+        </div>
+
+        <div class="stage" aria-hidden="true">
+          <div class="field">
+            <span class="line l1"></span>
+            <span class="line l2"></span>
+            <span class="line l3"></span>
+            <span class="caret"></span>
+          </div>
+          <div class="pill">
+            <span class="dot"></span>
+            <span class="pill-label">Listening</span>
+            <span class="bars"><i></i><i></i><i></i><i></i><i></i></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how" aria-labelledby="how-h">
+      <div class="wrap">
+        <h2 id="how-h">How it works</h2>
+        <ol class="steps">
+          <li>
+            <span class="num">1</span>
+            <h3>Press the shortcut</h3>
+            <p>Ctrl or Cmd + Shift + Space, in any app.</p>
+          </li>
+          <li>
+            <span class="num">2</span>
+            <h3>Speak</h3>
+            <p>A small overlay shows it is listening.</p>
+          </li>
+          <li>
+            <span class="num">3</span>
+            <h3>Press it again</h3>
+            <p>The text is cleaned up and pasted into the field you were in.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="features-h">
+      <div class="wrap">
+        <h2 id="features-h">What it does</h2>
+        <div class="grid">
+          <article class="card"><h3>Works in any app</h3><p>Pastes into whatever field has focus.</p></article>
+          <article class="card"><h3>Portuguese and English</h3><p>Português do Brasil, English, or automatic.</p></article>
+          <article class="card"><h3>Optional AI cleanup</h3><p>Fix punctuation, drop filler words, pick a style: minimal, professional, casual or concise. Or keep your exact words.</p></article>
+          <article class="card"><h3>Personal dictionary</h3><p>Names and terms it should get right.</p></article>
+          <article class="card"><h3>History you control</h3><p>Kept on your computer only, with a retention period, and you can turn it off.</p></article>
+          <article class="card"><h3>Stays out of the way</h3><p>Lives in the tray. Closing the window keeps dictation working.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="privacy" aria-labelledby="privacy-h">
+      <div class="wrap">
+        <h2 id="privacy-h">Privacy</h2>
+        <ul class="facts">
+          <li>While you dictate, audio is sent to the Mindwhisper server and on to a speech-to-text provider. Nothing is sent when you are not dictating.</li>
+          <li>Audio is never written to disk.</li>
+          <li>The recognized text goes to an AI provider for cleanup, unless you turn cleanup off or choose to keep your words.</li>
+          <li>History and your dictionary stay on your computer, and &ldquo;Delete all my data&rdquo; removes them.</li>
+          <li>Provider keys live only on the server, never in the app.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="download" aria-labelledby="download-h">
+      <div class="wrap">
+        <div class="panel">
+          <h2 id="download-h">Download Mindwhisper</h2>
+          <ul class="downloads" id="download-list"></ul>
+          <noscript><p><a class="textlink" href="%RELEASES_URL%">All downloads on GitHub</a></p></noscript>
+          <p class="muted">Windows 10 and 11, and macOS 11 or newer. Linux is not supported yet.</p>
+          <p class="muted">Mindwhisper needs an access token for its server. <a class="textlink" data-access-link href="%ACCESS_REQUEST_URL%">Request one</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="install" aria-labelledby="install-h">
+      <div class="wrap">
+        <h2 id="install-h">Install help</h2>
+        <div class="cols">
+          <div class="col">
+            <h3>macOS</h3>
+            <ol>
+              <li>Open the <code>.dmg</code> and drag Mindwhisper to Applications.</li>
+              <li>The first time, right-click the app and choose Open, then Open again (or System Settings, Privacy &amp; Security, Open Anyway).</li>
+              <li>Allow Microphone when asked, and turn on Accessibility for Mindwhisper in System Settings, Privacy &amp; Security, so it can paste.</li>
+            </ol>
+            <p class="muted">macOS may ask for these permissions again after an update.</p>
+          </div>
+          <div class="col">
+            <h3>Windows</h3>
+            <ol>
+              <li>Run the installer.</li>
+              <li>If &ldquo;Windows protected your PC&rdquo; appears, choose More info, then Run anyway.</li>
+              <li>Allow microphone access for desktop apps in Settings, Privacy, Microphone.</li>
+            </ol>
+          </div>
+        </div>
+        <p class="muted shared">These warnings appear because the early builds are not code-signed yet.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="faq-h">
+      <div class="wrap">
+        <h2 id="faq-h">FAQ</h2>
+        <div class="faq">
+          <details><summary>Does it work offline?</summary><p>No. Speech recognition runs on the server, so you need an internet connection.</p></details>
+          <details><summary>Which languages?</summary><p>Português do Brasil and English, with automatic detection.</p></details>
+          <details><summary>Is my history uploaded?</summary><p>No. It stays on your computer.</p></details>
+          <details><summary>Why does it need Accessibility on a Mac?</summary><p>To paste text into other apps. Without it the text stays on the clipboard.</p></details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap bar">
+      <span>Mindwhisper &middot; <span id="year">2026</span></span>
+      <a class="textlink" href="%RELEASES_URL%">Releases</a>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
