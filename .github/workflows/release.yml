@@ -1,0 +1,45 @@
+name: release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: macOS (Apple Silicon), os: macos-latest, args: '--target aarch64-apple-darwin', rust_targets: 'aarch64-apple-darwin' }
+          - { name: macOS (Intel), os: macos-latest, args: '--target x86_64-apple-darwin', rust_targets: 'x86_64-apple-darwin' }
+          - { name: Windows, os: windows-latest, args: '', rust_targets: '' }
+    name: build (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: pnpm }
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust_targets }}
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+      - run: pnpm install --frozen-lockfile
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Optional repository variable (Settings > Secrets and variables > Actions > Variables).
+          # Unset or blank leaves the app pointing at http://127.0.0.1:8787.
+          VITE_DEFAULT_BACKEND_URL: ${{ vars.DEFAULT_BACKEND_URL }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: 'Mindwhisper ${{ github.ref_name }}'
+          releaseBody: 'Unsigned build. See the install steps on the download page for the first-launch warning on macOS and Windows.'
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.args }}
